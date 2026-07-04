@@ -1,29 +1,716 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HTML 홈페이지 만들기..</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="krkim — Developer. Personal homepage and portfolio.">
+<meta name="color-scheme" content="light dark">
+<title>krkim · Developer</title>
+<script>
+  // Stamp theme before first paint to avoid a flash of the wrong theme
+  (function () {
+    var t = localStorage.getItem('theme');
+    if (!t) t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', t);
+  })();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Space+Grotesk:wght@300;400;500;600&family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --color-primary: #18181B;
+    --color-on-primary: #FFFFFF;
+    --color-secondary: #3F3F46;
+    --color-accent: #2563EB;
+    --color-background: #FAFAFA;
+    --color-foreground: #09090B;
+    --color-muted: #E8ECF0;
+    --color-border: #E4E4E7;
+    --color-ring: #18181B;
+    --color-surface: #FFFFFF;
+    --color-surface-hover-border: #D4D4D8;
+    --color-header-bg: rgba(250, 250, 250, 0.85);
+    --color-btn-primary-hover: #000000;
+    --contact-bg: #18181B;
+    --contact-fg: #FFFFFF;
+    --contact-muted: #A1A1AA;
+    --contact-border: transparent;
+    --font-heading: 'Archivo', 'Noto Sans KR', system-ui, sans-serif;
+    --font-body: 'Space Grotesk', 'Noto Sans KR', system-ui, sans-serif;
+    --radius: 12px;
+    --shadow-sm: 0 1px 2px rgba(9, 9, 11, 0.05);
+    --shadow-md: 0 4px 16px rgba(9, 9, 11, 0.08);
+  }
+
+  :root[data-theme="dark"] {
+    --color-primary: #FAFAFA;
+    --color-on-primary: #09090B;
+    --color-secondary: #A1A1AA;
+    --color-accent: #60A5FA;
+    --color-background: #09090B;
+    --color-foreground: #FAFAFA;
+    --color-muted: #27272A;
+    --color-border: #27272A;
+    --color-ring: #FAFAFA;
+    --color-surface: #18181B;
+    --color-surface-hover-border: #3F3F46;
+    --color-header-bg: rgba(9, 9, 11, 0.8);
+    --color-btn-primary-hover: #FFFFFF;
+    --contact-bg: #18181B;
+    --contact-fg: #FAFAFA;
+    --contact-muted: #A1A1AA;
+    --contact-border: #27272A;
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.45);
+  }
+
+  /* No-JS fallback: follow system preference */
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]):not([data-theme="dark"]) {
+      --color-primary: #FAFAFA;
+      --color-on-primary: #09090B;
+      --color-secondary: #A1A1AA;
+      --color-accent: #60A5FA;
+      --color-background: #09090B;
+      --color-foreground: #FAFAFA;
+      --color-muted: #27272A;
+      --color-border: #27272A;
+      --color-ring: #FAFAFA;
+      --color-surface: #18181B;
+      --color-surface-hover-border: #3F3F46;
+      --color-header-bg: rgba(9, 9, 11, 0.8);
+      --color-btn-primary-hover: #FFFFFF;
+      --contact-bg: #18181B;
+      --contact-fg: #FAFAFA;
+      --contact-muted: #A1A1AA;
+      --contact-border: #27272A;
+      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+      --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.45);
+    }
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--color-foreground);
+    background: var(--color-background);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3 { font-family: var(--font-heading); line-height: 1.25; }
+
+  a { color: inherit; text-decoration: none; }
+
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  /* ---------- Language toggle ---------- */
+  html[lang="ko"] .en { display: none; }
+  html[lang="en"] .ko { display: none; }
+
+  .lang-toggle, .theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-height: 44px;
+    padding: 8px 14px;
+    margin-left: 8px;
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--color-secondary);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    cursor: pointer;
+    transition: color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+  .lang-toggle:hover, .theme-toggle:hover {
+    color: var(--color-foreground);
+    border-color: var(--color-secondary);
+    box-shadow: var(--shadow-sm);
+  }
+  .lang-toggle svg, .theme-toggle svg { width: 16px; height: 16px; }
+  .theme-toggle { min-width: 44px; padding: 8px; }
+  :root[data-theme="dark"] .icon-moon { display: none; }
+  :root:not([data-theme="dark"]) .icon-sun { display: none; }
+
+  .container {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  /* ---------- Header ---------- */
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--color-header-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .site-header .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+  }
+  .logo {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 18px;
+    letter-spacing: -0.02em;
+  }
+  .logo span { color: var(--color-accent); }
+  .header-right { display: flex; align-items: center; }
+  .site-nav { display: flex; gap: 4px; }
+  .site-nav a {
+    padding: 10px 14px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--color-secondary);
+    border-radius: 8px;
+    transition: color 0.2s ease, background 0.2s ease;
+  }
+  .site-nav a:hover {
+    color: var(--color-foreground);
+    background: var(--color-muted);
+  }
+
+  /* ---------- Hero ---------- */
+  .hero { padding: 112px 0 96px; }
+  .hero .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--color-secondary);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    padding: 6px 14px;
+    margin-bottom: 28px;
+    box-shadow: var(--shadow-sm);
+  }
+  .hero .eyebrow .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #22C55E;
+  }
+  .hero h1 {
+    font-size: clamp(38px, 7vw, 68px);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    margin-bottom: 20px;
+  }
+  .hero h1 .accent { color: var(--color-accent); }
+  .hero p {
+    max-width: 560px;
+    font-size: 18px;
+    color: var(--color-secondary);
+    margin-bottom: 40px;
+  }
+  .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 48px;
+    padding: 12px 24px;
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 500;
+    border-radius: 10px;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  }
+  .btn:active { transform: scale(0.98); }
+  .btn-primary {
+    background: var(--color-primary);
+    color: var(--color-on-primary);
+  }
+  .btn-primary:hover {
+    background: var(--color-btn-primary-hover);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-1px);
+  }
+  .btn-secondary {
+    background: var(--color-surface);
+    color: var(--color-foreground);
+    border-color: var(--color-border);
+  }
+  .btn-secondary:hover {
+    border-color: var(--color-secondary);
+    box-shadow: var(--shadow-sm);
+    transform: translateY(-1px);
+  }
+  .btn svg { width: 18px; height: 18px; flex-shrink: 0; }
+
+  /* ---------- Sections ---------- */
+  section { padding: 88px 0; }
+  .section-head { margin-bottom: 48px; }
+  .section-head .label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+    margin-bottom: 12px;
+  }
+  .section-head h2 {
+    font-size: clamp(28px, 4vw, 40px);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  /* ---------- Projects ---------- */
+  .project-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 24px;
+  }
+  .project-card {
+    display: flex;
+    flex-direction: column;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    padding: 28px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  }
+  .project-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--color-surface-hover-border);
+  }
+  .project-card .icon-wrap {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    background: var(--color-muted);
+    color: var(--color-accent);
+    margin-bottom: 20px;
+  }
+  .project-card .icon-wrap svg { width: 22px; height: 22px; }
+  .project-card h3 { font-size: 19px; font-weight: 600; margin-bottom: 10px; }
+  .update-list {
+    list-style: none;
+    margin: 14px 0 0;
+    padding: 12px 14px;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    background: var(--color-background);
+    font-size: 13px;
+    color: var(--color-secondary);
+    display: grid;
+    gap: 6px;
+  }
+  .update-list strong { color: var(--color-foreground); font-weight: 600; }
+  .project-card p {
+    font-size: 15px;
+    color: var(--color-secondary);
+    flex-grow: 1;
+    margin-bottom: 20px;
+  }
+  .tags { display: flex; flex-wrap: wrap; gap: 8px; }
+  .tag {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--color-secondary);
+    background: var(--color-muted);
+    border-radius: 6px;
+    padding: 4px 10px;
+  }
+
+  /* ---------- Stack ---------- */
+  .stack-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    list-style: none;
+  }
+  .stack-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 44px;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 10px;
+    padding: 10px 18px;
+    font-size: 15px;
+    font-weight: 500;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+  .stack-item:hover { border-color: var(--color-accent); box-shadow: var(--shadow-sm); }
+  .stack-item svg { width: 18px; height: 18px; color: var(--color-accent); flex-shrink: 0; }
+
+  /* ---------- About ---------- */
+  .about-body {
+    max-width: 640px;
+    font-size: 17px;
+    color: var(--color-secondary);
+  }
+  .about-body p + p { margin-top: 18px; }
+  .about-body strong { color: var(--color-foreground); font-weight: 600; }
+
+  /* ---------- Contact ---------- */
+  .contact-card {
+    background: var(--contact-bg);
+    color: var(--contact-fg);
+    border: 1px solid var(--contact-border);
+    border-radius: 20px;
+    padding: clamp(40px, 6vw, 72px);
+    text-align: center;
+  }
+  .contact-card h2 {
+    font-size: clamp(26px, 4vw, 36px);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 14px;
+  }
+  .contact-card p {
+    color: var(--contact-muted);
+    max-width: 460px;
+    margin: 0 auto 32px;
+  }
+  .contact-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+  }
+  .btn-light {
+    background: #FFFFFF;
+    color: #09090B;
+  }
+  .btn-light:hover { background: #E8ECF0; transform: translateY(-1px); }
+  .btn-outline {
+    background: transparent;
+    color: var(--contact-fg);
+    border-color: #3F3F46;
+  }
+  .btn-outline:hover { border-color: #71717A; transform: translateY(-1px); }
+
+  /* ---------- Footer ---------- */
+  .site-footer {
+    border-top: 1px solid var(--color-border);
+    padding: 32px 0;
+  }
+  .site-footer .container {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    font-size: 14px;
+    color: var(--color-secondary);
+  }
+  .footer-links { display: flex; gap: 8px; }
+  .footer-links a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    color: var(--color-secondary);
+    transition: color 0.2s ease, background 0.2s ease;
+  }
+  .footer-links a:hover { color: var(--color-foreground); background: var(--color-muted); }
+  .footer-links svg { width: 20px; height: 20px; }
+
+  /* ---------- Scroll reveal ---------- */
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+  }
+  .reveal.visible { opacity: 1; transform: none; }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+      animation: none !important;
+      transition: none !important;
+    }
+    .reveal { opacity: 1; transform: none; }
+  }
+
+  @media (max-width: 640px) {
+    .hero { padding: 72px 0 64px; }
+    section { padding: 64px 0; }
+    .site-nav { display: none; }
+  }
+</style>
 </head>
-
 <body>
-    <a href="index.html">
-        <h1>HTML 홈페이지 만들기</h1>
-    </a>
 
-    <h2>목차</h2>
-    <ul>
-        <li>HTML의 탄생</li>
-        <li>HTML 특징</li>
-        <li>HTML 페이지 구조</li>
-        <li>HTML 홈페이지 만들기</li>
-    </ul>
+<header class="site-header">
+  <div class="container">
+    <a class="logo" href="#top" aria-label="krkim — home">krkim<span>.dev</span></a>
+    <div class="header-right">
+      <nav class="site-nav" aria-label="Primary">
+        <a href="#projects"><span class="en">Projects</span><span class="ko">프로젝트</span></a>
+        <a href="#stack"><span class="en">Stack</span><span class="ko">기술 스택</span></a>
+        <a href="#about"><span class="en">About</span><span class="ko">소개</span></a>
+        <a href="#contact"><span class="en">Contact</span><span class="ko">연락처</span></a>
+      </nav>
+      <button class="lang-toggle" id="langToggle" type="button" aria-label="Switch language / 언어 전환">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953 11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253m-16.432-9.67A8.959 8.959 0 0 0 3 12c0 .778.099 1.533.284 2.253"/></svg>
+        <span class="en">한국어</span><span class="ko">EN</span>
+      </button>
+      <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle dark mode / 다크 모드 전환">
+        <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z"/></svg>
+        <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
 
-    <h3>HTML의 탄생</h3>
-    <p>HTML은 <strong>Hyper Text Markup Language</strong>라는 용어의 약자로서 물리학자 <strong>팀 버너스리</strong>가 1990년에 HTTP, URL,
-        브라우저와 함께 개발했습니다. 팀 버너스리는 인터넷의 기반을 닦은 여러 공로로 웹의 아버지라고 불리는 인물 중 하나입니다.</p>
+<main id="top">
+  <!-- Hero -->
+  <section class="hero" aria-label="Introduction">
+    <div class="container">
+      <span class="eyebrow"><span class="dot" aria-hidden="true"></span><span class="en">Available for new projects</span><span class="ko">새로운 프로젝트, 언제든 환영해요</span></span>
+      <h1>
+        <span class="en">Hi, I'm krkim.<br>I build <span class="accent">apps</span> people actually use.</span>
+        <span class="ko">안녕하세요, krkim입니다.<br>일상에서 쓰이는 <span class="accent">앱</span>을 만드는 개발자예요.</span>
+      </h1>
+      <p>
+        <span class="en">From macOS utilities and on-device AI apps to field-operations platforms — I enjoy crafting clean, reliable software end to end.</span>
+        <span class="ko">macOS 유틸리티와 온디바이스 AI 앱부터 현장 운영 플랫폼까지, 처음부터 끝까지 깔끔하고 믿을 수 있는 소프트웨어를 만드는 걸 좋아해요.</span>
+      </p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#projects">
+          <span class="en">View projects</span><span class="ko">프로젝트 보기</span>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12l-7.5 7.5M21 12H3"/></svg>
+        </a>
+        <a class="btn btn-secondary" href="mailto:svkorea77@gmail.com">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75"/></svg>
+          <span class="en">Get in touch</span><span class="ko">연락하기</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Projects -->
+  <section id="projects" aria-labelledby="projects-title">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="label"><span class="en">Projects</span><span class="ko">프로젝트</span></span>
+        <h2 id="projects-title"><span class="en">Selected work</span><span class="ko">이런 것들을 만들어왔어요</span></h2>
+      </div>
+      <div class="project-grid">
+        <article class="project-card reveal">
+          <span class="icon-wrap" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.114 5.636a9 9 0 0 1 0 12.728M16.463 8.288a5.25 5.25 0 0 1 0 7.424M6.75 8.25l4.72-4.72a.75.75 0 0 1 1.28.53v15.88a.75.75 0 0 1-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.009 9.009 0 0 1 2.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75Z"/></svg>
+          </span>
+          <h3>TTS Voice</h3>
+          <p>
+            <span class="en">A macOS menu-bar app that reads any selected text aloud — double-tap Ctrl and it speaks. On-device neural TTS (Supertonic, native ONNX) alongside system voices, with a floating translucent player for seeking, rewinding and pausing, plus automatic reading history you can replay from the menu.</span>
+            <span class="ko">선택한 텍스트를 Ctrl 두 번으로 바로 읽어주는 macOS 메뉴바 앱이에요. 시스템 음성과 온디바이스 신경망 TTS(Supertonic, 네이티브 ONNX)를 함께 지원하고, 반투명 플로팅 플레이어로 탐색·되감기·일시정지가 되며, 읽은 글은 자동 저장돼 메뉴에서 다시 들을 수 있어요.</span>
+          </p>
+          <ul class="update-list">
+            <li><span class="en"><strong>2026-07-04</strong> — Floating player (drag-to-seek, ⏪5s, keyboard control)</span><span class="ko"><strong>2026-07-04</strong> — 플로팅 플레이어 (드래그 탐색, ⏪5초, 키보드 조작)</span></li>
+            <li><span class="en"><strong>2026-07-04</strong> — Reading history: auto-save &amp; replay from the menu</span><span class="ko"><strong>2026-07-04</strong> — 읽기 기록: 자동 저장 &amp; 메뉴에서 다시 듣기</span></li>
+            <li><span class="en"><strong>2026-07-04</strong> — Translucent capsule redesign of the player UI</span><span class="ko"><strong>2026-07-04</strong> — 플레이어 UI를 반투명 캡슐로 리디자인</span></li>
+          </ul>
+          <div class="tags">
+            <span class="tag">Swift</span>
+            <span class="tag">AppKit</span>
+            <span class="tag">ONNX Runtime</span>
+          </div>
+        </article>
+        <article class="project-card reveal">
+          <span class="icon-wrap" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M5.25 14.25h13.5m-13.5 0a3 3 0 0 1-3-3m3 3a3 3 0 1 0 0 6h13.5a3 3 0 1 0 0-6m-16.5-3a3 3 0 0 1 3-3h13.5a3 3 0 0 1 3 3m-19.5 0a4.5 4.5 0 0 1 .9-2.7L5.737 5.1a3.375 3.375 0 0 1 2.7-1.35h7.126c1.062 0 2.062.5 2.7 1.35l2.587 3.45a4.5 4.5 0 0 1 .9 2.7m0 0a3 3 0 0 1-3 3m0 3h.008v.008h-.008v-.008Zm0-6h.008v.008h-.008v-.008Zm-3 6h.008v.008h-.008v-.008Zm0-6h.008v.008h-.008v-.008Z"/></svg>
+          </span>
+          <h3>ChatGI</h3>
+          <p>
+            <span class="en">A fully offline LLM chat app that runs Gemma 4 directly on the device — no internet, no fees, no data leaving your phone. Built with Flutter for iOS and Android.</span>
+            <span class="ko">Gemma 4를 기기에서 직접 구동하는 완전 오프라인 LLM 채팅 앱이에요. 인터넷도, 요금도 필요 없고 데이터가 폰 밖으로 나가지 않아요. Flutter로 iOS·Android를 함께 지원해요.</span>
+          </p>
+          <div class="tags">
+            <span class="tag">Flutter</span>
+            <span class="tag">On-device AI</span>
+            <span class="tag">Gemma</span>
+          </div>
+        </article>
+        <article class="project-card reveal">
+          <span class="icon-wrap" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 0 0 6 3.75v16.5a2.25 2.25 0 0 0 2.25 2.25h7.5A2.25 2.25 0 0 0 18 20.25V3.75a2.25 2.25 0 0 0-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3"/></svg>
+          </span>
+          <h3>LinenStory</h3>
+          <p>
+            <span class="en">An operations platform for a linen management business — PDA/RFID scanning, QR tracking, delivery app and relay server working together to follow every item through the field.</span>
+            <span class="ko">린넨 관리 사업을 위한 운영 플랫폼이에요. PDA/RFID 스캔, QR 추적, 배송 앱과 릴레이 서버가 함께 맞물려 현장의 물품 흐름을 끝까지 따라가요.</span>
+          </p>
+          <div class="tags">
+            <span class="tag">Platform</span>
+            <span class="tag">RFID / QR</span>
+            <span class="tag">Mobile</span>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stack -->
+  <section id="stack" aria-labelledby="stack-title">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="label"><span class="en">Stack</span><span class="ko">기술 스택</span></span>
+        <h2 id="stack-title"><span class="en">Tools I work with</span><span class="ko">자주 쓰는 도구들이에요</span></h2>
+      </div>
+      <ul class="stack-list reveal">
+        <!-- Languages -->
+        <li class="stack-item"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17.25v1.007a3 3 0 0 1-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0 1 15 18.257V17.25m6-12V15a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 15V5.25m18 0A2.25 2.25 0 0 0 18.75 3H5.25A2.25 2.25 0 0 0 3 5.25m18 0V12a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 12V5.25"/></svg>Swift / AppKit</li>
+        <li class="stack-item"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 0 0 6 3.75v16.5a2.25 2.25 0 0 0 2.25 2.25h7.5A2.25 2.25 0 0 0 18 20.25V3.75a2.25 2.25 0 0 0-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3"/></svg>Flutter / Dart</li>
+        <li class="stack-item"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 3v1.5M4.5 8.25H3m18 0h-1.5M4.5 12H3m18 0h-1.5m-15 3.75H3m18 0h-1.5M8.25 19.5V21M12 3v1.5m0 15V21m3.75-18v1.5m0 15V21m-9-1.5h10.5a2.25 2.25 0 0 0 2.25-2.25V6.75a2.25 2.25 0 0 0-2.25-2.25H6.75A2.25 2.25 0 0 0 4.5 6.75v10.5a2.25 2.25 0 0 0 2.25 2.25Zm.75-12h9v9h-9v-9Z"/></svg>On-device AI (ONNX)</li>
+        <li class="stack-item"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M17.25 6.75 22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3-4.5 16.5"/></svg>JavaScript</li>
+        <li class="stack-item"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M14.25 9.75 16.5 12l-2.25 2.25m-4.5 0L7.5 12l2.25-2.25M6 20.25h12A2.25 2.25 0 0 0 20.25 18V6A2.25 2.25 0 0 0 18 3.75H6A2.25 2.25 0 0 0 3.75 6v12A2.25 2.25 0 0 0 6 20.25Z"/></svg>TypeScript</li>
+        <li class="stack-item"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 7.5l3 2.25-3 2.25m4.5 0h3m-9 8.25h13.5A2.25 2.25 0 0021 18V6a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 6v12a2.25 2.25 0 002.25 2.25z"/></svg>Python</li>
+        <li class="stack-item"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 3v1.5M4.5 8.25H3m18 0h-1.5M4.5 12H3m18 0h-1.5m-15 3.75H3m18 0h-1.5M8.25 19.5V21M12 3v1.5m0 15V21m3.75-18v1.5m0 15V21m-9-1.5h10.5a2.25 2.25 0 0 0 2.25-2.25V6.75a2.25 2.25 0 0 0-2.25-2.25H6.75A2.25 2.25 0 0 0 4.5 6.75v10.5a2.25 2.25 0 0 0 2.25 2.25Zm.75-12h9v9h-9v-9Z"/></svg>Java</li>
+        <li class="stack-item"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8.25V18a2.25 2.25 0 0 0 2.25 2.25h13.5A2.25 2.25 0 0 0 21 18V8.25m-18 0V6a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 6v2.25m-18 0h18M5.25 6h.008v.008H5.25V6ZM7.5 6h.008v.008H7.5V6Zm2.25 0h.008v.008H9.75V6Z"/></svg>HTML / CSS</li>
+        <!-- Frontend & Backend -->
+        <li class="stack-item"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M14.25 6.087c0-.355.186-.676.401-.959.221-.29.349-.634.349-1.003 0-1.036-1.007-1.875-2.25-1.875s-2.25.84-2.25 1.875c0 .369.128.713.349 1.003.215.283.401.604.401.959v0a.64.64 0 0 1-.657.643 48.39 48.39 0 0 1-4.163-.3c.186 1.613.293 3.25.315 4.907a.656.656 0 0 1-.658.663v0c-.355 0-.676-.186-.959-.401a1.647 1.647 0 0 0-1.003-.349c-1.036 0-1.875 1.007-1.875 2.25s.84 2.25 1.875 2.25c.369 0 .713-.128 1.003-.349.283-.215.604-.401.959-.401v0c.31 0 .555.26.532.57a48.039 48.039 0 0 1-.642 5.056c1.518.19 3.058.309 4.616.354a.64.64 0 0 0 .657-.643v0c0-.355-.186-.676-.401-.959a1.647 1.647 0 0 1-.349-1.003c0-1.035 1.008-1.875 2.25-1.875 1.243 0 2.25.84 2.25 1.875 0 .369-.128.713-.349 1.003-.215.283-.4.604-.4.959v0c0 .333.277.599.61.58a48.1 48.1 0 0 0 5.427-.63 48.05 48.05 0 0 0 .582-4.717.532.532 0 0 0-.533-.57v0c-.355 0-.676.186-.959.401-.29.221-.634.349-1.003.349-1.035 0-1.875-1.007-1.875-2.25s.84-2.25 1.875-2.25c.37 0 .713.128 1.003.349.283.215.604.401.96.401v0a.656.656 0 0 0 .658-.663 48.422 48.422 0 0 0-.37-5.36c-1.886.342-3.81.574-5.766.689a.578.578 0 0 1-.61-.58v0Z"/></svg>React / Next.js</li>
+        <li class="stack-item"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M9.53 16.122a3 3 0 0 0-5.78 1.128 2.25 2.25 0 0 1-2.4 2.245 4.5 4.5 0 0 0 8.4-2.245c0-.399-.078-.78-.22-1.128Zm0 0a15.998 15.998 0 0 0 3.388-1.62m-5.043-.025a15.994 15.994 0 0 1 1.622-3.395m3.42 3.42a15.995 15.995 0 0 0 4.764-4.648l3.876-5.814a1.151 1.151 0 0 0-1.597-1.597L14.146 6.32a15.996 15.996 0 0 0-4.649 4.763m3.42 3.42a6.776 6.776 0 0 0-3.42-3.42"/></svg>Tailwind CSS</li>
+        <li class="stack-item"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M5.25 14.25h13.5m-13.5 0a3 3 0 01-3-3m3 3a3 3 0 100 6h13.5a3 3 0 100-6m-16.5-3a3 3 0 013-3h13.5a3 3 0 013 3m-19.5 0a4.5 4.5 0 01.9-2.7L5.737 5.1a3.375 3.375 0 012.7-1.35h7.126c1.062 0 2.062.5 2.7 1.35l2.587 3.45a4.5 4.5 0 01.9 2.7m0 0a3 3 0 01-3 3m0 3h.008v.008h-.008v-.008zm0-6h.008v.008h-.008v-.008zm-3 6h.008v.008h-.008v-.008zm0-6h.008v.008h-.008v-.008z"/></svg>Node.js</li>
+        <li class="stack-item"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25A2.25 2.25 0 0 1 13.5 18v-2.25Z"/></svg>Spring Boot</li>
+        <!-- Databases -->
+        <li class="stack-item"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375m16.5 0v3.75m-16.5-3.75v3.75m16.5 0v3.75C20.25 16.153 16.556 18 12 18s-8.25-1.847-8.25-4.125v-3.75m16.5 0c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125"/></svg>PostgreSQL</li>
+        <li class="stack-item"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375m16.5 0v3.75m-16.5-3.75v3.75m16.5 0v3.75C20.25 16.153 16.556 18 12 18s-8.25-1.847-8.25-4.125v-3.75m16.5 0c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125"/></svg>MySQL</li>
+        <li class="stack-item"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375m16.5 0v3.75m-16.5-3.75v3.75m16.5 0v3.75C20.25 16.153 16.556 18 12 18s-8.25-1.847-8.25-4.125v-3.75m16.5 0c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125"/></svg>MongoDB</li>
+        <li class="stack-item"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z"/></svg>Redis</li>
+        <!-- Infra & Tools -->
+        <li class="stack-item"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9"/></svg>Docker</li>
+        <li class="stack-item"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5l-2.25-1.313M21 7.5v2.25m0-2.25-2.25 1.313M3 7.5l2.25-1.313M3 7.5l2.25 1.313M3 7.5v2.25m9 3 2.25-1.313M12 12.75l-2.25-1.313M12 12.75V15m0 6.75 2.25-1.313M12 21.75V19.5m0 2.25-2.25-1.313m0-16.875L12 2.25l2.25 1.313M21 14.25v2.25l-2.25 1.313m-13.5 0L3 16.5v-2.25"/></svg>Kubernetes</li>
+        <li class="stack-item"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15a4.5 4.5 0 0 0 4.5 4.5H18a3.75 3.75 0 0 0 1.332-7.257 3 3 0 0 0-3.758-3.848 5.25 5.25 0 0 0-10.233 2.33A4.502 4.502 0 0 0 2.25 15Z"/></svg>AWS / Cloud</li>
+        <li class="stack-item"><svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.203 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.02 10.02 0 0 0 22 12.017C22 6.484 17.522 2 12 2Z"/></svg>Git / GitHub</li>
+        <li class="stack-item"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 17.25v-.228a4.5 4.5 0 0 0-.12-1.03l-2.268-9.64a3.375 3.375 0 0 0-3.285-2.602H7.923a3.375 3.375 0 0 0-3.285 2.602l-2.268 9.64a4.5 4.5 0 0 0-.12 1.03v.228m19.5 0a3 3 0 0 1-3 3H5.25a3 3 0 0 1-3-3m19.5 0a3 3 0 0 0-3-3H5.25a3 3 0 0 0-3 3m16.5 0h.008v.008h-.008v-.008Zm-3 0h.008v.008h-.008v-.008Z"/></svg>Linux</li>
+        <li class="stack-item"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99"/></svg>CI/CD</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section id="about" aria-labelledby="about-title">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="label"><span class="en">About</span><span class="ko">소개</span></span>
+        <h2 id="about-title"><span class="en">A little about me</span><span class="ko">저는 이런 사람이에요</span></h2>
+      </div>
+      <div class="about-body reveal">
+        <p>
+          <span class="en">I'm <strong>krkim</strong>, a developer who enjoys turning ideas into working software. I care about clean code, thoughtful design, and shipping things that actually help people.</span>
+          <span class="ko"><strong>krkim</strong>이에요. 아이디어를 실제로 동작하는 소프트웨어로 만드는 일을 좋아해요. 깔끔한 코드와 사려 깊은 디자인, 그리고 정말로 사람들에게 도움이 되는 걸 만드는 데 마음을 쓰는 편이에요.</span>
+        </p>
+        <p>
+          <span class="en">When I'm not coding, I'm usually exploring new tools, reading about technology, or working on side projects.</span>
+          <span class="ko">코딩하지 않을 때는 새로운 도구를 구경하거나, 기술 글을 읽거나, 사이드 프로젝트를 만지작거리며 시간을 보내요.</span>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact" aria-labelledby="contact-title">
+    <div class="container">
+      <div class="contact-card reveal">
+        <h2 id="contact-title"><span class="en">Let's build something together</span><span class="ko">함께 무언가를 만들어봐요</span></h2>
+        <p>
+          <span class="en">Have a project in mind, or just want to say hello? My inbox is always open.</span>
+          <span class="ko">하고 싶은 프로젝트가 있거나, 그냥 인사하고 싶으시다면 언제든 편하게 메일 주세요.</span>
+        </p>
+        <div class="contact-actions">
+          <a class="btn btn-light" href="mailto:svkorea77@gmail.com">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75"/></svg>
+            svkorea77@gmail.com
+          </a>
+          <a class="btn btn-outline" href="https://github.com/seanpark" target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.203 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.02 10.02 0 0 0 22 12.017C22 6.484 17.522 2 12 2Z"/></svg>
+            GitHub
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <span><span class="en">© 2026 krkim. All rights reserved.</span><span class="ko">© 2026 krkim. 방문해 주셔서 고마워요.</span></span>
+    <div class="footer-links">
+      <a href="mailto:svkorea77@gmail.com" aria-label="Email krkim">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75"/></svg>
+      </a>
+      <a href="https://github.com/seanpark" target="_blank" rel="noopener noreferrer" aria-label="krkim on GitHub">
+        <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.203 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.02 10.02 0 0 0 22 12.017C22 6.484 17.522 2 12 2Z"/></svg>
+      </a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Language toggle: default to saved choice, else browser language
+  const htmlEl = document.documentElement;
+  const saved = localStorage.getItem('lang');
+  const initial = saved || (navigator.language && navigator.language.startsWith('ko') ? 'ko' : 'en');
+  htmlEl.setAttribute('lang', initial);
+  document.title = initial === 'ko' ? 'krkim · 개발자' : 'krkim · Developer';
+
+  document.getElementById('langToggle').addEventListener('click', () => {
+    const next = htmlEl.getAttribute('lang') === 'ko' ? 'en' : 'ko';
+    htmlEl.setAttribute('lang', next);
+    localStorage.setItem('lang', next);
+    document.title = next === 'ko' ? 'krkim · 개발자' : 'krkim · Developer';
+  });
+
+  // Theme toggle (initial theme is stamped in <head> before first paint)
+  document.getElementById('themeToggle').addEventListener('click', () => {
+    const next = htmlEl.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    htmlEl.setAttribute('data-theme', next);
+    localStorage.setItem('theme', next);
+  });
+
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    reveals.forEach((el) => observer.observe(el));
+  } else {
+    reveals.forEach((el) => el.classList.add('visible'));
+  }
+</script>
 
 </body>
-
 </html>
